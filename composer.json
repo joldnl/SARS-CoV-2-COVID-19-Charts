@@ -1,0 +1,12 @@
+{
+    "name": "jurgen/corona-charts",
+    "authors": [
+        {
+            "name": "Jurgen",
+            "email": "info@jold.nl"
+        }
+    ],
+    "require": {
+        "league/csv": "8.0"
+    }
+}
