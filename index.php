@@ -25,6 +25,14 @@ $data->boot();
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
         <link href="https://fonts.googleapis.com/css2?family=Patua+One&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 
+              
+        <meta property="og:title" content="SARS-CoV-2 (COVID-19) in <?php echo $selectCountry; ?>"/>
+        <meta property="og:type" content="article"/>
+        <meta property="og:description" content="This chart shows the total of confirmed cases, new cases per day, and the number of fatalities in <?php echo $selectCountry; ?>"/>
+        <meta property="og:image" content="http://stuff.jold.nl/sars-cov-2/nl/assets/social-screenshot.jpg"/>
+        <meta property="og:image:width" content="800">
+        <meta property="og:image:height" content="450">
+
         <style media="screen">
             body {
                 background: rgb(6, 30, 34);
