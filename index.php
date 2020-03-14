@@ -3,151 +3,23 @@
 use League\Csv\Reader;
 
 require 'vendor/autoload.php';
+require 'CoronaData.class.php';
 
-$confirmedData  = Reader::createFromPath('COVID-19-DATASET/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv', 'r');
-$confirmed      = $confirmedData->fetch();
+$selectCountry = 'Netherlands';
 
-$deathsData     = Reader::createFromPath('COVID-19-DATASET/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv', 'r');
-$deaths         = $deathsData->fetch();
-
-$recoveredData  = Reader::createFromPath('COVID-19-DATASET/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv', 'r');
-$recovered      = $recoveredData->fetch();
-
-$dates = [];
-$dataHubei = [];
-$dataItaly = [];
-$dataBelgium = [];
-$dataGermany = [];
-$dataFrance = [];
-
-$dates = [];
-$dataNetherlandsConfirmed = [];
-$dataNetherlandsNew = [];
-$dataNetherlandsDeaths = [];
-$dataNetherlandsRecovered = [];
-
-
-// Confirmed
-$i = 0;
-foreach ($confirmed as $row) {
-    
-    // var_dump( $i );
-    if ($row[0] == 'Province/State') {
-        unset( $row[0], $row[1], $row[2], $row[3] );
-        $dates = array_slice($row, -21, 21, true);
-    }
-    
-    if (isset($row[1]) && $row[1] === 'Netherlands') {
-        unset( $row[0], $row[1], $row[2], $row[3] );
-        // var_dump( $row );
-        $dataNetherlandsConfirmed = array_slice($row, -21, 21, true);
-        // var_dump( $row );
-    }
-    
-    // if (isset($row[1]) && $row[1] === 'Netherlands') {
-    //     unset( $row[0], $row[1], $row[2], $row[3] );
-    //     var_dump( $row );
-    //     $dataNetherlandsNew = array_slice($row, -21, 21, true);
-    // }
-
-    $i++;
-
-    // if (isset($row[0]) && $row[0] === 'Hubei') {
-    //     unset( $row[0], $row[1], $row[2], $row[3] );
-    //     // var_dump( $row );
-    //     $dataHubei = array_slice($row, -21, 21, true);
-    // }
-    // 
-    // if (isset($row[1]) && $row[1] === 'Italy') {
-    //     unset( $row[0], $row[1], $row[2], $row[3] );
-    //     // var_dump( $row );
-    //     $dataItaly = array_slice($row, -21, 21, true);
-    // }
-    // 
-    // if (isset($row[1]) && $row[1] === 'Belgium') {
-    //     unset( $row[0], $row[1], $row[2], $row[3] );
-    //     // var_dump( $row );
-    //     $dataBelgium = array_slice($row, -21, 21, true);
-    // }
-    // 
-    // if (isset($row[1]) && $row[1] === 'Germany') {
-    //     unset( $row[0], $row[1], $row[2], $row[3] );
-    //     // var_dump( $row );
-    //     $dataGermany = array_slice($row, -21, 21, true);
-    // }
-    // 
-    // if (isset($row[0]) && $row[0] === 'France') {
-    //     unset( $row[0], $row[1], $row[2], $row[3] );
-    //     // var_dump( $row );
-    //     $dataFrance = array_slice($row, -21, 21, true);
-    // }
+if (isset($_GET['country'])) {
+    $selectCountry = $_GET['country'];
 }
 
-
-
-// Deaths
-$i = 0;
-foreach ($deaths as $row) {
-    
-    // var_dump( $i );
-    if ($row[0] == 'Province/State') {
-        unset( $row[0], $row[1], $row[2], $row[3] );
-        $dates = array_slice($row, -21, 21, true);
-    }
-    
-    if (isset($row[1]) && $row[1] === 'Netherlands') {
-        unset( $row[0], $row[1], $row[2], $row[3] );
-        // var_dump( $row );
-        $dataNetherlandsDeaths = array_slice($row, -21, 21, true);
-        // var_dump( $row );
-    }
-
-    $i++;
-
-}
-
-
-// Recovered
-$i = 0;
-foreach ($recovered as $row) {
-    
-    // var_dump( $i );
-    if ($row[0] == 'Province/State') {
-        unset( $row[0], $row[1], $row[2], $row[3] );
-        $dates = array_slice($row, -21, 21, true);
-    }
-    
-    if (isset($row[1]) && $row[1] === 'Netherlands') {
-        unset( $row[0], $row[1], $row[2], $row[3] );
-        // var_dump( $row );
-        $dataNetherlandsRecovered = array_slice($row, -21, 21, true);
-        // var_dump( $row );
-    }
-
-    $i++;
-
-}
-
-
-$y = 0;
-foreach ($dataNetherlandsConfirmed as $key => $value) {
-
-    $diff = 0;
-
-    if ($y > 0 ) {
-        $diff = $value - $dataNetherlandsConfirmed[$key - 1];
-        // var_dump( $diff );
-    }
-
-    $dataNetherlandsNew[] = $diff;
-    // var_dump( $value );
-    $y++;
-}
+$data = new CoronaData;
+$data->setCountry($selectCountry);
+$data->boot();
 
 ?>
+
 <html>
     <head>
-        <title>SARS-CoV-2 (COVID-19) in the Netherlands</title>
+        <title>SARS-CoV-2 (COVID-19) in <?php echo $selectCountry; ?></title>
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -203,7 +75,7 @@ foreach ($dataNetherlandsConfirmed as $key => $value) {
                 font-weight: 300;
                 color: rgb(255, 255, 255);
             } 
-            canvas#myChart {
+            canvas#corona-chart {
                 margin-left: auto;
                 margin-right: auto;
                 max-width: 768px; 
@@ -225,141 +97,89 @@ foreach ($dataNetherlandsConfirmed as $key => $value) {
         <div class="background"></div>
 
         <main>
-            <h1>SARS-CoV-2 (COVID-19) in the Netherlands - Chart</h1>
-            <p class="description">This chart shows the total of confirmed cases, new cases per day, and the number of fatalities in the Netherlands.</p>
-            <p class="description-small">Please note that for the Netherlands, there is no recovery information available.</p>
+            <h1>SARS-CoV-2 (COVID-19) in <?php echo $selectCountry; ?> - Chart</h1>
+            <p class="description">This chart shows the total of confirmed cases, new cases per day, and the number of fatalities in <?php echo $selectCountry; ?>.</p>
+            <p class="description-small">Please note that for some countries, there is no recovery information available.</p>
 
-            <canvas id="myChart"></canvas>
+            <canvas id="corona-chart"></canvas>
         
-        <script type="text/javascript">
+            <script type="text/javascript">
 
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var chart = new Chart(ctx, {
-                // The type of chart we want to create
-                type: 'line',
+                var ctx = document.getElementById('corona-chart').getContext('2d');
+                var chart = new Chart(ctx, {
 
-                // The data for our dataset
-                data: {
-                    labels: [
-                        <?php foreach($dates as $date): ?>
-                            <?php $date = new \DateTime($date); ?>
-                            '<?php echo $date->format('d M') ?>',
-                        <?php endforeach; ?>
-                    ],
-                    datasets: [
-                        {
-                            label: 'Total infected',
-                            backgroundColor: 'rgb(9, 208, 246)',
-                            borderColor: 'rgb(9, 208, 246)',
-                        	borderDash: [10, 5],
-                        	fill: false,
-                            data: [
-                                <?php foreach($dataNetherlandsConfirmed as $data): ?>
-                                    '<?php echo $data ?>',
-                                <?php endforeach; ?>
-                            ]
-                        },
-                        {
-                            label: 'New infections',
-                            backgroundColor: 'rgb(252, 200, 62)',
-                            borderColor: 'rgb(252, 200, 62)',
-                        	borderDash: [10, 5],
-                        	fill: false,
-                            data: [
-                                <?php foreach($dataNetherlandsNew as $data): ?>
-                                    '<?php echo $data ?>',
-                                <?php endforeach; ?>
-                            ]
-                        },
-                        {
-                            label: 'Total Deceased',
-                            backgroundColor: 'rgb(230, 0, 0)',
-                            borderColor: 'rgb(230, 0, 0)',
-                        	borderDash: [10, 5],
-                        	fill: false,
-                            data: [
-                                <?php foreach($dataNetherlandsDeaths as $data): ?>
-                                    '<?php echo $data ?>',
-                                <?php endforeach; ?>
-                            ]
-                        },
-                        {
-                            label: 'Total recovered',
-                            backgroundColor: 'rgb(28, 175, 53)',
-                            borderColor: 'rgb(28, 175, 53)',
-                        	borderDash: [10, 5],
-                            borderWidth: 1,
-                        	fill: false,
-                            data: [
-                                <?php foreach($dataNetherlandsRecovered as $data): ?>
-                                    '<?php echo $data ?>',
-                                <?php endforeach; ?>
-                            ]
-                        },
-                        // {
-        				// 	label: 'Besmettingen Italie',
-        				// 	fill: false,
-        				// 	backgroundColor: 'rgb(28, 175, 53)',
-        				// 	borderColor: 'rgb(28, 175, 53)',
-        				// 	borderDash: [5, 5],
-        				// 	data: [
-                        //         <?php foreach($dataItaly as $data): ?>
-                        //             '<?php echo $data ?>',
-                        //         <?php endforeach; ?>
-        				// 	],
-        				// },
-                        // {
-        				// 	label: 'Besmettingen Hubei China',
-        				// 	fill: false,
-        				// 	backgroundColor: 'rgb(156, 15, 15)',
-        				// 	borderColor: 'rgb(156, 15, 15)',
-        				// 	borderDash: [5, 5],
-        				// 	data: [
-                        //         <?php foreach($dataHubei as $data): ?>
-                        //             '<?php echo $data ?>',
-                        //         <?php endforeach; ?>
-        				// 	],
-        				// },
-                        // {
-        				// 	label: 'Besmettingen Belgie',
-        				// 	fill: false,
-        				// 	backgroundColor: 'rgb(203, 173, 29)',
-        				// 	borderColor: 'rgb(203, 173, 29)',
-        				// 	borderDash: [5, 5],
-        				// 	data: [
-                        //         <?php foreach($dataBelgium as $data): ?>
-                        //             '<?php echo $data ?>',
-                        //         <?php endforeach; ?>
-        				// 	],
-        				// },          
-                        // {
-        				// 	label: 'Besmettingen Duitsland',
-        				// 	fill: false,
-        				// 	backgroundColor: 'rgb(237, 131, 28)',
-        				// 	borderColor: 'rgb(237, 131, 28)',
-        				// 	borderDash: [5, 5],
-        				// 	data: [
-                        //         <?php foreach($dataGermany as $data): ?>
-                        //             '<?php echo $data ?>',
-                        //         <?php endforeach; ?>
-        				// 	],
-        				// }
-                    ],
-                },
+                    type: 'line',
+                    data: {
+                        labels: [
+                            <?php foreach($data->dates as $date): ?>
+                                <?php $date = new \DateTime($date); ?>
+                                '<?php echo $date->format('d M') ?>',
+                            <?php endforeach; ?>
+                        ],
+                        datasets: [
+                            {
+                                label: 'Total infected',
+                                backgroundColor: 'rgb(9, 208, 246)',
+                                borderColor: 'rgb(9, 208, 246)',
+                            	borderDash: [10, 5],
+                            	fill: false,
+                                data: [
+                                    <?php foreach($data->confirmed as $dataConfirmed): ?>
+                                        '<?php echo $dataConfirmed ?>',
+                                    <?php endforeach; ?>
+                                ]
+                            },
+                            {
+                                label: 'New infections',
+                                backgroundColor: 'rgb(252, 200, 62)',
+                                borderColor: 'rgb(252, 200, 62)',
+                            	borderDash: [10, 5],
+                            	fill: false,
+                                data: [
+                                    <?php foreach($data->new as $dataNew): ?>
+                                        '<?php echo $dataNew ?>',
+                                    <?php endforeach; ?>
+                                ]
+                            },
+                            {
+                                label: 'Total Deceased',
+                                backgroundColor: 'rgb(230, 0, 0)',
+                                borderColor: 'rgb(230, 0, 0)',
+                            	borderDash: [10, 5],
+                            	fill: false,
+                                data: [
+                                    <?php foreach($data->deaths as $dataDeaths): ?>
+                                        '<?php echo $dataDeaths ?>',
+                                    <?php endforeach; ?>
+                                ]
+                            },
+                            {
+                                label: 'Total recovered',
+                                backgroundColor: 'rgb(28, 175, 53)',
+                                borderColor: 'rgb(28, 175, 53)',
+                            	borderDash: [10, 5],
+                                borderWidth: 1,
+                            	fill: false,
+                                data: [
+                                    <?php foreach($data->recovered as $dataRecovered): ?>
+                                        '<?php echo $dataRecovered ?>',
+                                    <?php endforeach; ?>
+                                ]
+                            },
 
-                // Configuration options go here
-                options: {}
-            });
-        </script>
+                        ],
+                    },
+
+                    // Configuration options go here
+                    options: {}
+                });
+            </script>
         
-            <p class="source">
-                Source: <a href="https://github.com/CSSEGISandData/" target="_blank">Novel Coronavirus (COVID-19) Cases, provided by CSSE at Johns Hopkins University</a>
-            </p>
-            <p class="source">
-                Visualization by: <a href="https://github.com/joldnl/" target="_blank">Jurgen Oldenburg</a>
-            </p>
+            <p class="source">Source: <a href="https://github.com/CSSEGISandData/" target="_blank">Novel Coronavirus (COVID-19) Cases, provided by CSSE at Johns Hopkins University</a></p>
+            <p class="source">Visualization by: <a href="https://github.com/joldnl/" target="_blank">Jurgen Oldenburg</a></p>
+            <p class="source">version: v0.1.1 - 14-03-2020</p>
+            
         </main>
-
 
     </body>
 </html>
