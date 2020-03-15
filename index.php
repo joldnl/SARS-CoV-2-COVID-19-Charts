@@ -54,6 +54,15 @@ $data->boot();
                         labels: [<?php foreach($data->dates as $date): ?><?php $date = new \DateTime($date); ?>'<?php echo $date->format('d M') ?>', <?php endforeach; ?>],
                         datasets: [
                             {
+                                label: 'Estimated RIVM',
+                                backgroundColor: 'rgb(99, 111, 113)',
+                                borderColor: 'rgb(99, 111, 113)',
+                            	borderDash: [10, 5],
+                                borderWidth: 1,
+                            	fill: false,
+                                data: [<?php foreach($data->confirmed as $dataConfirmed): ?>'<?php echo ($dataConfirmed * 5.2) ?>', <?php endforeach; ?>]
+                            },
+                            {
                                 label: 'Confirmed',
                                 backgroundColor: 'rgb(9, 208, 246)',
                                 borderColor: 'rgb(9, 208, 246)',
