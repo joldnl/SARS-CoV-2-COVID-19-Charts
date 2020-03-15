@@ -1,4 +1,12 @@
 
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-32608703-9"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-32608703-9');
+        </script>
+
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
         <link href="https://fonts.googleapis.com/css2?family=Patua+One&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
