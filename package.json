@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.12.1",
     "jquery": "^3.4.1",
     "jquery-csv": "^1.0.8",
     "papaparse": "^5.1.1"
