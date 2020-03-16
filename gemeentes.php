@@ -25,11 +25,18 @@ $gemeentes = $data->gemeentes;
 <html>
     <head>
         <title>COVID-19 (Corona Virus) Top Cities by Confirmed cases</title>
-              
+
+        <meta name="twitter:creator" content="@staxxnl" />
+        <meta name="twitter:title" content="COVID-19 (Corona Virus) Top Cities by Confirmed cases"/>
+        <meta name="twitter:description" content="This chart shows the total of confirmed cases, new cases per day, and the number of fatalities in <?php echo $selectCountry; ?>"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="author" content="Jurgen Oldenburg"/>
+        <meta name="twitter:image:src" content="https://stuff.jold.nl/sars-cov-2/assets/social-screenshot.jpg"/>
+
         <meta property="og:title" content="COVID-19 (Corona Virus) Top Cities by Confirmed cases"/>
         <meta property="og:type" content="article"/>
         <meta property="og:description" content="This chart shows the total of confirmed cases, new cases per day, and the number of fatalities in <?php echo $selectCountry; ?>"/>
-        <meta property="og:image" content="http://stuff.jold.nl/sars-cov-2/nl/assets/social-screenshot.jpg"/>
+        <meta property="og:image" content="https://stuff.jold.nl/sars-cov-2/assets/social-screenshot.jpg"/>
         <meta property="og:image:width" content="800">
         <meta property="og:image:height" content="450">
 
